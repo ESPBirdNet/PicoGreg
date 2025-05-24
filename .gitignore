@@ -1,0 +1,11 @@
+.vscode/
+build/
+pico_i2c_slave/
+# editor swap and backup files
+*~
+*.swp
+# Pico output artifacts
+*.elf
+*.bin
+*.uf2
+*.map
