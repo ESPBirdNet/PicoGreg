@@ -15,7 +15,8 @@
 static int scr_w, scr_h;
 
 // Helper: send one command byte (DC=0)
-static void write_command(uint8_t cmd) {
+static void write_command(uint8_t cmd) 
+{
     gpio_put(ST7789_DC_PIN, 0);
     gpio_put(ST7789_CS_PIN, 0);
     spi_write_blocking(ST7789_SPI_PORT, &cmd, 1);
@@ -23,7 +24,8 @@ static void write_command(uint8_t cmd) {
 }
 
 // Helper: send data bytes (DC=1)
-static void write_data(const uint8_t *data, size_t len) {
+static void write_data(const uint8_t *data, size_t len) 
+{
     gpio_put(ST7789_DC_PIN, 1);
     gpio_put(ST7789_CS_PIN, 0);
     spi_write_blocking(ST7789_SPI_PORT, data, len);
@@ -31,26 +33,32 @@ static void write_data(const uint8_t *data, size_t len) {
 }
 
 // Set rotation / orientation and BGR/RGB order
-void st7789_set_rotation(uint8_t madctl_bits) {
+void st7789_set_rotation(uint8_t madctl_bits) 
+{
     write_command(CMD_MADCTL);
     write_data(&madctl_bits, 1);
 
     // Update width/height based on MV bit (bit 5)
-    if (madctl_bits & (1 << 5)) {
+    if (madctl_bits & (1 << 5)) 
+    {
         scr_w = ST7789_HEIGHT;
         scr_h = ST7789_WIDTH;
-    } else {
+    } 
+    else 
+    {
         scr_w = ST7789_WIDTH;
         scr_h = ST7789_HEIGHT;
     }
 }
 
 // Toggle inversion on/off
-void st7789_invert_colors(bool invert) {
+void st7789_invert_colors(bool invert) 
+{
     write_command(invert ? CMD_INVON : CMD_INVOFF);
 }
 
-void st7789_init(void) {
+void st7789_init(void) 
+{
     // 1) SPI pins + control pins
     spi_init(ST7789_SPI_PORT, 20 * 1000 * 1000);
     gpio_set_function(ST7789_SCK_PIN,  GPIO_FUNC_SPI);
@@ -110,7 +118,8 @@ void st7789_init(void) {
     sleep_ms(100);
 }
 
-void st7789_set_window(int x, int y, int w, int h) {
+void st7789_set_window(int x, int y, int w, int h) 
+{
     // Clamp negative origins
     if (x < 0) { w += x; x = 0; }
     if (y < 0) { h += y; y = 0; }
@@ -137,17 +146,21 @@ void st7789_set_window(int x, int y, int w, int h) {
     write_command(CMD_RAMWR);
 }
 
-void st7789_write_pixels(const uint16_t *data, size_t length) {
+void st7789_write_pixels(const uint16_t *data, size_t length) 
+{
     write_data((const uint8_t *)data, length * 2);
 }
 
-void st7789_fill(uint16_t color) {
+void st7789_fill(uint16_t color) 
+{
     st7789_set_window(0, 0, scr_w, scr_h);
     static uint16_t line_buffer[ST7789_WIDTH];
-    for (int i = 0; i < scr_w; i++) {
+    for (int i = 0; i < scr_w; i++) 
+    {
         line_buffer[i] = color;
     }
-    for (int y = 0; y < scr_h; y++) {
+    for (int y = 0; y < scr_h; y++) 
+    {
         st7789_write_pixels(line_buffer, scr_w);
     }
 }

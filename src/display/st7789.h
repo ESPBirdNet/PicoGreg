@@ -1,5 +1,3 @@
-// st7789.h
-
 #ifndef ST7789_H
 #define ST7789_H
 
@@ -14,7 +12,7 @@ extern "C" {
 #define ST7789_WIDTH   240
 #define ST7789_HEIGHT  320
 
-// Default SPI and control pins (override before include if needed)
+// Default SPI and control pins
 #ifndef ST7789_SPI_PORT
 #define ST7789_SPI_PORT   spi1
 #endif
@@ -49,6 +47,7 @@ void st7789_write_pixels(const uint16_t *data, size_t length);
 // Fill entire screen with a single RGB565 color
 void st7789_fill(uint16_t color);
 
+// Invert display colors
 void st7789_invert_colors(bool invert);
 
 #endif // ST7789_H

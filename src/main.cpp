@@ -26,15 +26,17 @@ size_t framebuffer_index = 0;
  */
 volatile uint8_t blink_code = 0;
 
-void i2c_handler(i2c_inst_t *i2c, i2c_slave_event_t ev) {
-    static uint8_t buf[16];  // temp buffer for incoming I²C data
+void i2c_handler(i2c_inst_t *i2c, i2c_slave_event_t ev) 
+{
+     // temp buffer for incoming I²C data
+    static uint8_t buf[16];
 
-    if (ev == I2C_SLAVE_RECEIVE) {
-        // ── determine how many bytes to clock in this transaction ──
+    if (ev == I2C_SLAVE_RECEIVE) 
+    {
         size_t read_len;
         if (receiving_framebuffer) 
         {
-            // we’re in “grab framebuffer” mode
+            // we’re in "grab framebuffer" mode
             size_t remaining = sizeof(framebuffer) - framebuffer_index;
             if (remaining >= sizeof(buf)) 
             {
@@ -44,17 +46,16 @@ void i2c_handler(i2c_inst_t *i2c, i2c_slave_event_t ev) {
             {
                 read_len = remaining;
             }
-        } else 
+        } 
+        else 
         {
             // normal command is always exactly 5 bytes
             read_len = 5;
         }
 
-        // read exactly read_len bytes into buf[]
         i2c_read_raw_blocking(i2c, buf, read_len);
         size_t count = read_len;
 
-        // ── dispatch either framebuffer data or a 5-byte command ──
         if (receiving_framebuffer) 
         {
             // copy new chunk into our big framebuffer[]
@@ -105,6 +106,8 @@ void i2c_handler(i2c_inst_t *i2c, i2c_slave_event_t ev) {
     }
 }
 
+
+
 /*
  * Main
  */
@@ -119,9 +122,9 @@ int main() {
     st7789_init();
     init_palette();
     
-    st7789_fill(0xFFFF);  // Bright red
+    st7789_fill(0xFFFF);
     sleep_ms(1000);
-    st7789_fill(0x0000);  // Bright green
+    st7789_fill(0x0000);
 
     // ------ I2C‐SLAVE on GP4/GP5 ------
     i2c_init(I2C_PORT, 500 * 1000);     // 500 kHz

@@ -1,6 +1,5 @@
 .vscode/
 build/
-pico_i2c_slave/
 # editor swap and backup files
 *~
 *.swp

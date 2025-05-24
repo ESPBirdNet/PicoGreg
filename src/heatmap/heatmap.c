@@ -1,10 +1,10 @@
-// heatmap.c
 #include "heatmap.h"
 #include "../display/st7789.h" 
 
 uint16_t palette[256];
 
-void init_palette(void) {
+void init_palette(void) 
+{
     // Define the four corner colours in 8-bit R,G,B
     const uint8_t stops[4][3] = {
         {  0,   0, 139},  // #00008B (dark blue)
@@ -14,7 +14,8 @@ void init_palette(void) {
     };
 
     // We’ll divide 256 entries into 3 segments of ~85 entries each
-    for (int i = 0; i < 256; i++) {
+    for (int i = 0; i < 256; i++) 
+    {
         // Compute which segment we’re in: 0,1,2
         float idx = (i / 255.0f) * 3.0f;
         int   seg = (int)idx;              // 0,1,2
@@ -39,10 +40,11 @@ void init_palette(void) {
     }
 }
 
-void display_heatmap_centered(const uint8_t * framebuffer) {
+void display_heatmap_centered(const uint8_t * framebuffer) 
+{
     const int dst_w = 320;               // Full width of display
     const int dst_h = FB_H * 4;          // Stretch vertically: 32 × 3 = 96
-    const int y_offset = (200 - dst_h) / 2 + 20;  // Vertical centering
+    const int y_offset = (200 - dst_h) / 2 + 20;  // Vertical centering (20 pixel offset needed)
 
     const float scale_x = (float)FB_W / dst_w;
     const float scale_y = (float)FB_H / dst_h;
@@ -51,13 +53,15 @@ void display_heatmap_centered(const uint8_t * framebuffer) {
 
     static uint16_t linebuf[320];        // line buffer for 1 row
 
-    for (int y = 0; y < dst_h; y++) {
+    for (int y = 0; y < dst_h; y++) 
+    {
         int src_y = (int)(y * scale_y);
         if (src_y >= FB_H) src_y = FB_H - 1;
 
         uint8_t * src_row = (uint8_t*)(framebuffer + (src_y * FB_W));
 
-        for (int x = 0; x < dst_w; x++) {
+        for (int x = 0; x < dst_w; x++) 
+        {
             int src_x = (int)(x * scale_x);
             if (src_x >= FB_W) src_x = FB_W - 1;
 
